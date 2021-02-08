@@ -5,12 +5,12 @@ from OpenGL.GLU import *
 from figure import *
 from tkinter import *
 from tkinter import ttk
-
+import time
 ApplicationGL = False
 
 class PortSettings:
     Name = "COM1"
-    Speed = "9600"
+    Speed = 9600
     Timeout = 2
 
 myport = PortSettings()
@@ -41,7 +41,7 @@ Port_entry.place(x = 180, y = 30,anchor = "center")
 Baud_label = Label(text = "Speed:",font =("",12),justify= "right",bg = "#2E2D40",fg = "#FFFFFF")
 Baud_label.place(x = 50, y =80,anchor = "center")
 Baud_entry = Entry(width = 20,bg = "#37364D", fg = "#FFFFFF", justify = "center")
-Baud_entry.insert(INSERT,myport.Speed)
+Baud_entry.insert(INSERT,str(myport.Speed))
 Baud_entry.place(x = 180, y = 80,anchor = "center")
 
 ok_button = Button(text = "Ok",width = 8,command = RunAppliction,bg="#135EF2",fg ="#FFFFFF")
@@ -80,21 +80,34 @@ def DrawBoard():
             glVertex3fv(vertices[vertex])
         x += 1
     glEnd()
-    
+
+
+def SerialConnection ():
+    global serial_object
+    serial_object = serial.Serial( myport.Name, baudrate= myport.Speed, timeout = myport.Timeout)
+
+
 def main():
     ConfWindw.mainloop()
     if ApplicationGL == True:
         InitPygame()
         InitGL()
+        try:
+            SerialConnection()
+            while True:
 
-        while True:
-
-            glRotatef(1, 3, 1, 1)
+                glRotatef(1, 3, 1, 1)
+                glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
+                DrawText("My text")
+                DrawBoard()
+                pygame.display.flip()
+                pygame.time.wait(10)
+        except:
+            
             glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
-            DrawText("My text")
-            DrawBoard()
+            DrawText("Sorry, something is wrong :c")
             pygame.display.flip()
-            pygame.time.wait(10)
+            time.sleep(5)
 
 
 if __name__ == '__main__': main()
