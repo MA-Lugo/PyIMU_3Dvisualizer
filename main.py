@@ -97,13 +97,13 @@ def DrawGL():
 
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
     glLoadIdentity() 
-    gluPerspective(100, (display[0]/display[1]), 0.1, 50.0)
-    glTranslatef(0.0,0.0, -5)
+    gluPerspective(90, (display[0]/display[1]), 0.1, 50.0)
+    glTranslatef(0.0,0.0, -5)   
 
-    glRotatef(myimu.Pitch, 0, 0, 1)
-    glRotatef(myimu.Roll, -1, 0, 0)
+    glRotatef(round(myimu.Pitch,1), 0, 0, 1)
+    glRotatef(round(myimu.Roll,1), -1, 0, 0)
 
-    DrawText("Roll: {0:.2f}               Pitch: {1:.2f}".format(myimu.Roll,myimu.Pitch))
+    DrawText("Roll: {}°               Pitch: {}°".format(round(myimu.Roll,1),round(myimu.Pitch,1)))
     DrawBoard()
     pygame.display.flip()
 
