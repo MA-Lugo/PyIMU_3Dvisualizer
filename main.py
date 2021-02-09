@@ -6,15 +6,24 @@ from figure import *
 from tkinter import *
 from tkinter import ttk
 import time
+import serial
+import threading
+
 ApplicationGL = False
 
 class PortSettings:
-    Name = "COM1"
-    Speed = 9600
+    Name = "COM3"
+    Speed = 19200
     Timeout = 2
+class IMU:
+    Roll = 0
+    Pitch = 0
+    Yaw = 0
+
+
 
 myport = PortSettings()
-
+myimu  = IMU()
 
 def RunAppliction():
     global ApplicationGL
@@ -81,10 +90,30 @@ def DrawBoard():
         x += 1
     glEnd()
 
+def DrawGL():
+    glRotatef(1, 1, 0, 0)
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
+    DrawText("Roll: {0:.2f}            Pitch: {1:.2f}".format(myimu.Roll,myimu.Pitch))
+    DrawBoard()
+    pygame.display.flip()
 
 def SerialConnection ():
     global serial_object
     serial_object = serial.Serial( myport.Name, baudrate= myport.Speed, timeout = myport.Timeout)
+
+def ReadData():
+    while True:
+        time.sleep(0.1) #delay for do not overload the CPU
+        serial_input = serial_object.readline()
+        if(len(serial_input) == 7 and serial_input[0] == 0x24 ): 
+            X = [serial_input[2], serial_input[1]]
+            Ax = int.from_bytes(X,byteorder = 'big',signed=True)
+
+            Y = [serial_input[4], serial_input[3]]
+            Ay = int.from_bytes(Y,byteorder = 'big',signed=True)
+
+            myimu.Roll = Ax/16384.0*90
+            myimu.Pitch = Ay/16384.0*90
 
 
 def main():
@@ -92,22 +121,16 @@ def main():
     if ApplicationGL == True:
         InitPygame()
         InitGL()
-        try:
-            SerialConnection()
-            while True:
-
-                glRotatef(1, 3, 1, 1)
-                glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
-                DrawText("My text")
-                DrawBoard()
-                pygame.display.flip()
-                pygame.time.wait(10)
-        except:
+        
+        SerialConnection()
+        myThread1 = threading.Thread(target = ReadData)
+        myThread1.daemon = True
+        myThread1.start()   
+        while True:
             
-            glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
-            DrawText("Sorry, something is wrong :c")
-            pygame.display.flip()
-            time.sleep(5)
+            DrawGL()
+            pygame.time.wait(10)
+            
 
 
 if __name__ == '__main__': main()
