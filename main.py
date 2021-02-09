@@ -73,15 +73,18 @@ def InitGL():
     gluPerspective(100, (display[0]/display[1]), 0.1, 50.0)
     glTranslatef(0.0,0.0, -5)
 
+
 def DrawText(textString):     
     font = pygame.font.SysFont ("Courier New",25, True)
     textSurface = font.render(textString, True, (255,255,0), (46,45,64,255))     
     textData = pygame.image.tostring(textSurface, "RGBA", True)         
     glDrawPixels(textSurface.get_width(), textSurface.get_height(), GL_RGBA, GL_UNSIGNED_BYTE, textData)    
 
-def DrawBoard(): 
+def DrawBoard():
+    
     glBegin(GL_QUADS)
     x = 0
+    
     for surface in surfaces:
         
         for vertex in surface:  
@@ -91,9 +94,16 @@ def DrawBoard():
     glEnd()
 
 def DrawGL():
-    glRotatef(1, 1, 0, 0)
+
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
-    DrawText("Roll: {0:.2f}            Pitch: {1:.2f}".format(myimu.Roll,myimu.Pitch))
+    glLoadIdentity() 
+    gluPerspective(100, (display[0]/display[1]), 0.1, 50.0)
+    glTranslatef(0.0,0.0, -5)
+
+    glRotatef(myimu.Pitch, 0, 0, 1)
+    glRotatef(myimu.Roll, -1, 0, 0)
+
+    DrawText("Roll: {0:.2f}               Pitch: {1:.2f}".format(myimu.Roll,myimu.Pitch))
     DrawBoard()
     pygame.display.flip()
 
@@ -103,7 +113,7 @@ def SerialConnection ():
 
 def ReadData():
     while True:
-        time.sleep(0.1) #delay for do not overload the CPU
+        
         serial_input = serial_object.readline()
         if(len(serial_input) == 7 and serial_input[0] == 0x24 ): 
             X = [serial_input[2], serial_input[1]]
@@ -121,16 +131,23 @@ def main():
     if ApplicationGL == True:
         InitPygame()
         InitGL()
-        
-        SerialConnection()
-        myThread1 = threading.Thread(target = ReadData)
-        myThread1.daemon = True
-        myThread1.start()   
-        while True:
-            
-            DrawGL()
-            pygame.time.wait(10)
-            
+ 
+        try:
+            SerialConnection()
+            myThread1 = threading.Thread(target = ReadData)
+            myThread1.daemon = True
+            myThread1.start() 
+            while True:
+                DrawGL()
+                pygame.time.wait(10)
+
+        except:
+            glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
+            DrawText("Sorry, something is wrong :c")
+            pygame.display.flip()
+            time.sleep(5)
+
+                 
 
 
 if __name__ == '__main__': main()
