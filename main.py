@@ -12,8 +12,8 @@ import threading
 ApplicationGL = False
 
 class PortSettings:
-    Name = "COM3"
-    Speed = 19200
+    Name = "COM1"
+    Speed = 9600
     Timeout = 2
 class IMU:
     Roll = 0
