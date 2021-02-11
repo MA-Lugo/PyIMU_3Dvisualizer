@@ -61,7 +61,7 @@ def InitPygame():
     pygame.init()
     display = (640,480)
     pygame.display.set_mode(display, DOUBLEBUF|OPENGL)
-    pygame.display.set_caption('IMU visualizer')
+    pygame.display.set_caption('IMU visualizer   (Press Esc to exit)')
 
 
 def InitGL():
@@ -138,6 +138,11 @@ def main():
             myThread1.daemon = True
             myThread1.start() 
             while True:
+                event = pygame.event.poll()
+                if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
+                    pygame.quit()
+                    break 
+
                 DrawGL()
                 pygame.time.wait(10)
 
