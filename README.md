@@ -12,9 +12,9 @@ _Simulador 3D para acelerometro/gyroscopio MPU6050_
 * pySerial
 *pyOpenGL
 
-*MPU6050
-*microcontroller
-*USB-Serial Converter
+* MPU6050
+* microcontroller
+* USB-Serial Converter
 
 
 ## Wiki 📖
