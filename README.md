@@ -28,7 +28,7 @@ MPU6050 y enviarlos de forma serial.
 
 Aqui hay algunos ejemplos de como hacerlo utilizando:
 * [Microcip PIC MCU](https://github.com/MA-Lugo/)
-* [STM32 MCU](https://github.com/MA-Lugo/)
+* [STM32F1 MCU](https://github.com/MA-Lugo/STM32F1_MPU6050_lib/blob/main/Core/Src/main.c)
 
 ### Formato de la trama de datos:
 En la siguiente imagen se muestra el formato de la trama de datos necesarios.
