@@ -115,7 +115,7 @@ def ReadData():
     while True:
         
         serial_input = serial_object.readline()
-        if(len(serial_input) == 7 and serial_input[0] == 0x24 ): 
+        if(len(serial_input) == 9 and serial_input[0] == 0x24 ): 
             X = [serial_input[2], serial_input[1]]
             Ax = int.from_bytes(X,byteorder = 'big',signed=True)
 
