@@ -21,7 +21,7 @@ _Simulador 3D para acelerometro/gyroscopio MPU6050_
 
 ## Wiki 📖
 
-Puedes encontrar mucho más de cómo utilizar este proyecto en este [video](https://www.youtube.com/watch?v=vh91z3-3ncE)
+Puedes ver más acerca del proyecto en el video [demo](https://www.youtube.com/watch?v=vh91z3-3ncE)
 
 Para comenzar es necesario contar con el microcontrolador encargado adquirir los datos del
 MPU6050 y enviarlos de forma serial.
