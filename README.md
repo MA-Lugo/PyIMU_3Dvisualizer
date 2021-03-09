@@ -27,7 +27,7 @@ Para comenzar es necesario contar con el microcontrolador encargado adquirir los
 MPU6050 y enviarlos de forma serial.
 
 Aqui hay algunos ejemplos de como hacerlo utilizando:
-* [Microcip PIC MCU](https://github.com/MA-Lugo/)
+* [Microcip PIC16F1709 MCU](https://github.com/MA-Lugo/PIC16F1709_MPU6050_ex)
 * [STM32F1 MCU](https://github.com/MA-Lugo/STM32F1_MPU6050_lib/blob/main/Core/Src/main.c)
 
 ### Formato de la trama de datos:
